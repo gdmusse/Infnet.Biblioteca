@@ -4,6 +4,8 @@ using LibraryCore.Infrastructure.External;
 namespace LibraryCore.Infrastructure.Adapters;
 
 // PADRÃO DE PROJETO ESTRUTURAL - ADAPTER
+// Objetivo: Permitir que classes com interfaces incompatíveis trabalhem juntas.
+// Aplicação: Adapta-se a chamada da "ThirdPartyPushApi" para a interface "INotificacaoService" do domínio.
 public class PushNotificationAdapter : INotificacaoService
 {
     private readonly ThirdPartyPushApi _apiExterna;

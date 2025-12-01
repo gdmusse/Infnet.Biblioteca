@@ -6,14 +6,18 @@ using LibraryCore.Patterns.Strategy;
 
 namespace LibraryCore.Services;
 
-// PRINCÍPIOS SOLID - SRP (Single Responsibility Principle)
+// Princípio SOLID: SRP (Single Responsibility Principle)
+// Objetivo: Uma classe deve ter apenas um motivo para mudar.
+// Aplicação: Esta classe cuida apenas da regra de negócio do empréstimo. Não envia e-mail, não acessa banco.
 public class EmprestimoService
 {
     private readonly IEstoqueRepository _estoqueRepo;
     private readonly INotificacaoService _notificacaoService;
     private readonly IRecomendacaoService _recomendacaoService;
 
-    // PRINCÍPIOS SOLID - DIP (Dependency Inversion Principle)
+    // PRINCÍPIOS SOLID: DIP (Dependency Inversion Principle)
+    // Objetivo: Módulos de alto nível não devem depender de módulos de baixo nível. Ambos devem depender de abstrações.
+    // Aplicação: Injeta interfaces e não as classes concretas.
     public EmprestimoService(
         IEstoqueRepository estoqueRepo, 
         INotificacaoService notificacaoService,
