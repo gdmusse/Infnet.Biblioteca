@@ -3,6 +3,7 @@ using LibraryCore.Domain.Enums;
 using LibraryCore.Domain.Interfaces;
 using LibraryCore.Services.Interfaces;
 using LibraryCore.Patterns.Strategy;
+using LibraryCore.Infrastructure.External;
 
 namespace LibraryCore.Services;
 
@@ -43,7 +44,6 @@ public class EmprestimoService
 
         var dataDevolucao = estrategia.CalcularDevolucao(DateTime.Now);
 
-        // 3. Persistência
         estoque.DebitarEstoque();
         _estoqueRepo.Atualizar(estoque);
         
@@ -51,8 +51,16 @@ public class EmprestimoService
         Console.WriteLine($"[SUCESSO] Empréstimo criado. Devolução: {emprestimo.DataDevolucao.ToShortDateString()}");
 
         _notificacaoService.Notificar($"Empréstimo confirmado: {livro.Nome}", usuario.Email);
-        
-        var sugestao = _recomendacaoService.ObterSugestaoBaseadaEmIA(usuario);
-        Console.WriteLine($"[IA RECOMENDA]: Que tal ler '{sugestao}' a seguir?");
+
+        if (_recomendacaoService is RecomendacaoServiceIA serviceIA)
+        {
+            var sugestao = serviceIA.SugerirBaseadoNoLivroAtual(livro);
+            Console.WriteLine($"[IA RECOMENDA]: Como você gosta de {livro.Genero}, leia também: '{sugestao}'");
+        }
+        else
+        {
+            var sugestao = _recomendacaoService.ObterSugestaoBaseadaEmIA(usuario);
+            Console.WriteLine($"[IA RECOMENDA]: Baseado no seu perfil: '{sugestao}'");
+        }
     }
 }
